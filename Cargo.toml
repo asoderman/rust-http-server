@@ -1,0 +1,26 @@
+[package]
+name = "rust-http-server"
+version = "0.0.0"
+authors = ["Alex Soderman"]
+
+[features]
+python = []
+wsgi = []
+
+[dependencies]
+chrono = "0.4.0"
+cpython = "0.1"
+ctrlc = "3.1.0"
+serde_json = "1.0"
+serde_derive = "1.0"
+serde = "1.0"
+walkdir = "2"
+native-tls = "0.1"
+clap = "2.30"
+log = "0.4"
+pretty_env_logger = "0.2"
+
+[dev-dependencies]
+tempdir = "0.3"
+reqwest = "0.8.5"
+curl = "0.4.11"

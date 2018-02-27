@@ -1,0 +1,15 @@
+static
+*.swp
+
+*.pyc
+__pycache__
+
+*.cert
+*.crt
+*.pem
+*.pfx
+*.p12
+*.key
+*.csr
+
+target
