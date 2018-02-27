@@ -1,6 +1,10 @@
 before_install:
     - sudo apt-get -qq update
-    - sudo apt-get install -y openssl
+    - sudo apt-get install python3-dev 
+    - sudo apt-get install python3-pip
+    - sudo pip3 install Django
+    - sudo pip3 install bottle
+    - sudo pip3 install Flask
 language: rust
 rust:
   - stable
@@ -11,4 +15,4 @@ matrix:
     - rust: nightly
 script:
   - cargo build --verbose --all
-  - cargo test --verbose --all
+  - cargo test --verbose --all -- --test-threads=1

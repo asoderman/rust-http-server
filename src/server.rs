@@ -356,16 +356,14 @@ mod tests {
 
     #[test]
     fn test_serve_can_500() {
-        let test_port = "9997";
+        let test_port = "5000";
         let config = create_test_config_fail_app(test_port);
         let server = Server::from_config(config);
 
         thread::spawn(move || { server.serve(); } );
 
-        let mut client = Easy::new(); 
-        client.url(&format!("http://127.0.0.1:{}/", test_port)).unwrap();
-        client.perform().unwrap();
-        assert_eq!(client.response_code().unwrap(), 500);
+        let response = reqwest::get(&format!("http://127.0.0.1:{}/", test_port)).unwrap();
+        assert!(response.status().is_server_error());
 
     }
     fn create_test_config_fail_app(port: &str) -> Config {
