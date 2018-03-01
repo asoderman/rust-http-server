@@ -16,8 +16,8 @@ pub fn run_cli<'a, 'b>() -> App<'a, 'b> {
             -h, --host=[HOST]       'Sets the host address'
             -p, --port=[PORT]       'Sets the port'
             -a, --app=[APP]         '<module>:<callable> The server application'
-            -cert=[CERT],           'Path to pkcs12 certificate'
-            -pwd=[PWD],             'Password for the pkcs12'
+            --cert=[CERT]           'Path to pkcs12 certificate'
+            --pwd=[PWD]             'Password for the pkcs12'
             -t, --threads=[THREADS] 'Sets the number of threads to use'
             -v...                   'Sets verbosity'")
 
