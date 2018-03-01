@@ -26,6 +26,20 @@ rust-http-server will look for `config.json` in the current working directory. C
 * cert_password
 * threads
 
+CLI usage:
+```
+
+            [DIRECTORY]            'Serves the contents of the directory'
+            -h, --host=[HOST]       'Sets the host address'
+            -p, --port=[PORT]       'Sets the port'
+            -a, --app=[APP]         '<module>:<callable> The server application'
+            -cert=[CERT],           'Path to pkcs12 certificate'
+            -pwd=[PWD],             'Password for the pkcs12'
+            -t, --threads=[THREADS] 'Sets the number of threads to use'
+            -v...                   'Sets verbosity'
+```
+
 ## TODO:
 * More documentation
-* Fix setting host/port via CLI
+* HTTP passthrough
+* Benchmarks
