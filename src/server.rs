@@ -38,6 +38,7 @@ enum ServerError {
 
 type ServerResult<T> = Result<T, ServerError>;
 
+/// For types that implement shutdown but with different signatures.
 trait Close{ 
     fn close(&mut self, how: Shutdown) -> ::std::io::Result<()>;
 }
@@ -62,6 +63,7 @@ impl Close for TcpStream {
     }
 }
 
+/// A trait for TCP connections. Includes TLS and reguler TCP.
 trait Connection: Read + Write + Close {}
 impl<T> Connection for T where T: Read + Write + Close {}
 
@@ -112,6 +114,7 @@ impl Server {
         }
     }
 
+    /// Registers the provided directory's contents to be served over HTTP.
     pub fn serve_directory(&mut self, dir: &str) {
         trace!("Registering static routes for: {}", dir);
         self.router.register_static_routes(dir);
@@ -122,7 +125,7 @@ impl Server {
     /// If a pkcs12 is provided the server will listen on port 8443 for HTTPS
     /// requests as well. The pkcs12 password can be provided in the config or 
     /// as an environment variable.
-    /// Takes requests and adds them and their handler to the threadpool.
+    /// Takes connections and adds them and their handler to the threadpool.
     pub fn serve(&self) {
         let listener = TcpListener::bind(format!("{}:{}", &self.config.host, &self.config.port)).expect("Could not start listener on specified host address/port");
         info!("Running on host: {}", &self.config.host);

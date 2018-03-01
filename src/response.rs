@@ -5,6 +5,7 @@ use std::fmt;
 
 use self::chrono::Local;
 
+/// HTTP Response
 pub struct Response {
     kind: ResponseType,
     headers: Vec<String>,
@@ -12,6 +13,7 @@ pub struct Response {
     file: Option<Vec<u8>>,
 }
 
+/// The HTTP response status represented as an enum.
 pub enum ResponseType {
     NotFound,
     HTTPOk,
@@ -22,6 +24,7 @@ pub enum ResponseType {
 
 impl Response {
 
+    /// Creates a new response where the body is text based.
     fn new_text(body: String, headers: Option<Vec<String>>, kind: ResponseType) -> Response {
         Response {
             body: Some(body),
@@ -31,6 +34,7 @@ impl Response {
         }
     }
 
+    /// Creates a new response where the body is a buffer of bytes.
     pub fn new_file(file: Vec<u8>, headers: Option<Vec<String>>, kind: ResponseType)-> Response {
         Response {
             body: None,
@@ -41,18 +45,21 @@ impl Response {
     }
 
     #[allow(dead_code)]
+    /// An HTTP 200 response with a text body.
     pub fn http_ok(body: String) -> Response {
         let mut response = Response::new_text(body, None, ResponseType::HTTPOk);
         response.default_headers();
         response
     }
 
+    /// An HTTP 200 response with a file body.
     pub fn http_ok_file(file: Vec<u8>) -> Response {
         let mut response = Response::new_file(file, None, ResponseType::HTTPOk); 
         response.default_headers();
         response
     }
 
+    /// An HTTP 404 response. The body is provided.
     pub fn not_found() -> Response {
         let body = r#"<!doctype html>
 <html lang="en">
@@ -109,6 +116,7 @@ impl Response {
         response
     }
 
+    /// An HTTP 500 response. The body is provided.
     pub fn server_error() -> Response {
         let mut r = Response {
             body: Some(String::from("<html><body><h1>rust-http-server: Internal server error</h1></body></html>")),
@@ -120,7 +128,8 @@ impl Response {
         r
     }
 
-    /// Status line:
+    /// Creates the default headers for every response.
+    /// Status line, Date, Server name
     fn default_headers(&mut self) {
         let status = format!("{} {} {}", self.http_version(), self.code(), self.kind);
         let date = format!("Date: {}", Local::now().to_rfc2822());
@@ -160,6 +169,8 @@ impl Response {
         headers
     }
 
+    /// Returns a `String` of the response containing only the headers. The body can be immediately
+    /// append to this.
     fn headers_only(&self) -> String {
         let mut result = self.headers.join("\r\n").to_string();
         result.push_str("\r\n\r\n");

@@ -1,3 +1,4 @@
+//! The servers router module.
 extern crate walkdir;
 
 use std::collections::HashMap;
@@ -8,7 +9,6 @@ use self::walkdir::WalkDir;
 
 use utils::file::is_hidden;
 
-/// The servers router module.
 /// Stores routes in a hashmap. Checks if the request is trying to access a static
 /// resouce and provides file location for the resource. Only files in the specified
 /// folder(s) are visible on the server. Static routes are generated on server
@@ -20,6 +20,7 @@ pub struct Router {
 }
 
 impl Router {
+    /// Initialize a `Router` without any routes.
     pub fn new() -> Router {
         let static_routes = HashMap::new();
 
@@ -28,6 +29,7 @@ impl Router {
         }
     }
 
+    /// Initialize a `Router` and immediately register routes for the directory provided.
     pub fn from(folder: &str) -> Router {
         let mut router = Router::new();
         router.register_static_routes(folder);
@@ -57,6 +59,11 @@ impl Router {
         vprintln!("Routes: {:?}", self.static_routes);
     }
 
+    /// Creates a URL for the resource.
+    /// Example:
+    /// A user is working in directory `app`.
+    /// The user registers the directory `static` within `app`
+    /// The URLs for the files with in static will be `/static/foo.js` etc.
     fn create_url(path: &Path, dir: &str) -> String {
         let components = path.components();
 
@@ -73,10 +80,12 @@ impl Router {
         }
     }
 
+    /// Checks if the route provided is an actual resource.
     pub fn is_static_content(&self, path: &str) -> bool {
         self.static_routes.contains_key(path)
     }
 
+    /// Retrieves the full path to the resource.
     pub fn get(&self, path: &str) -> &str {
         &self.static_routes[path]
     }

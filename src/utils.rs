@@ -1,3 +1,5 @@
+//! A module for misc. functions.
+
 pub mod file {
     extern crate walkdir;
 

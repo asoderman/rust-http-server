@@ -1,7 +1,11 @@
+//! The server threadpool
 use std::sync::{Arc, Mutex, mpsc};
 use std::thread;
 use std::marker::Sync;
 
+/// This implementation of `ThreadPool` is based of the one in [the
+/// book](https://doc.rust-lang.org/book/second-edition/ch20-04-storing-threads.html). The
+/// documentation may be better there than it is here.
 pub struct ThreadPool {
     workers : Vec<Worker>,
     sender: mpsc::Sender<Message>,
@@ -56,6 +60,7 @@ impl ThreadPool {
         }
     }
 
+    /// Execute a job in the threadpool.
     pub fn execute<F>(&self, f: F) 
         where
             F: FnOnce() + Send + 'static

@@ -6,6 +6,8 @@ use std::io::prelude::*;
 use std::io::Error;
 use std::default::Default;
 
+/// Server configuration. This is a finalized version of the server configuration.
+/// This will be consumed during initialization by `Server`.
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Config {
     pub host: String,
@@ -17,6 +19,8 @@ pub struct Config {
     pub threads: Option<usize>,
 }
 
+/// Server configuration implementation of the builder pattern. This struct allows chain
+/// setting of server options.
 #[derive(Serialize, Deserialize)]
 pub struct ConfigBuilder {
     pub host: Option<String>,
@@ -76,6 +80,7 @@ impl ConfigBuilder {
         self
     }
 
+    /// Finalize the `Config`.
     pub fn build(self) -> Config {
         Config {
             host: self.host.unwrap_or_else(|| "127.0.0.1".to_string()),
