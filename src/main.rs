@@ -22,7 +22,6 @@ mod wsgi;
 mod cli;
 
 use std::process;
-use std::usize;
 
 use cli::{run_cli, config_from_cli, cli_verbosity, cli_serve_directory};
 
@@ -30,7 +29,7 @@ pub static mut VERBOSE: bool = false;
 
 fn main() {
     pretty_env_logger::init_custom_env("RUST_HTTP_SERVER_LOG");
-    let cli = run_cli();
+    let cli = run_cli().get_matches();
     cli_verbosity(&cli);
 
     let name = env!("CARGO_PKG_NAME");

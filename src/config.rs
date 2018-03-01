@@ -2,7 +2,6 @@ extern crate serde;
 extern crate serde_json;
 
 use std::fs::File;
-use std::env::args;
 use std::io::prelude::*;
 use std::io::Error;
 use std::default::Default;
@@ -53,20 +52,25 @@ impl ConfigBuilder {
         self
     }
 
+    #[allow(dead_code)]
     pub fn set_app(&mut self, app: &str) -> &mut Self {
         self.app = Some(app.to_string());
         self
     }
+
+    #[allow(dead_code)]
     pub fn set_static_folder(&mut self, static_folder: &str) -> &mut Self {
         self.static_folder = Some(static_folder.to_string());
         self
     }
 
+    #[allow(dead_code)]
     pub fn set_https_cert(&mut self, https_cert: &str) -> &mut Self {
         self.https_cert = Some(https_cert.to_string());
         self
     }
 
+    #[allow(dead_code)]
     pub fn set_cert_password(&mut self, cert_password: &str) -> &mut Self {
         self.cert_password = Some(cert_password.to_string());
         self
@@ -108,39 +112,6 @@ impl Default for ConfigBuilder {
 
 impl Config {
 
-    /// Tries to create a config from config.json falls back to 
-    /// command line args
-    pub fn new() -> Config {
-        
-        let file_result = from_file();
-
-        match file_result {
-            Ok(c) => c,
-            Err(_) => from_args(),
-        }
-    }
-
-    /// Create a config with provided information. This will be moved to a 
-    /// builder pattern.
-    // TODO: implement builder pattern for this type
-    #[allow(dead_code)]
-    pub fn from(host: Option<String>, port: Option<String>, app: Option<String>, static_folder: Option<String>, https_cert: Option<String>, cert_password: Option<String>, app_path: Option<String>) -> Config {
-
-        let host = host.unwrap_or_else(|| "127.0.0.1".to_string());
-        let port = port.unwrap_or_else(|| "8080".to_string());
-
-        Config {
-            host,
-            port,
-            app,
-            static_folder,
-            https_cert,
-            cert_password,
-            app_path,
-            threads: None,
-        }
-    }
-
     /// Create a config from a JSON string. Only used in testing currently.
     #[allow(dead_code)]
     pub fn from_json(json: &str) -> Config {
@@ -154,55 +125,3 @@ impl Config {
 
 }
 
-fn from_args() -> Config {
-
-    let arguments = args().collect();
-    let host = get_host(&arguments).unwrap_or_else(|| "127.0.0.1".to_string());
-    let port = get_port(&arguments).unwrap_or_else(|| "8080".to_string());
-    Config {
-        host,
-        port,
-        app: None,
-        static_folder: None,
-        https_cert: None,
-        cert_password: None,
-        app_path: None,
-        threads: None,
-    }
-}
-
-fn from_file() -> Result<Config, Error> {
-    
-    let mut f = File::open("config.json")?;
-    let mut contents = String::new();
-    f.read_to_string(&mut contents)?;
-    // TODO: Fix the error handling here: convert serde_json error to io error
-    let result: Config = serde_json::from_str(&contents).unwrap();
-
-    Ok(result)
-}
-
-/// Returns the host to run on. Taken from command line args.
-#[cfg_attr(feature = "cargo-clippy", allow(ptr_arg))]
-fn get_host(args: &Vec<String>) -> Option<String> {
-    // TODO: port this to cli
-    for argument in args {
-        if argument.starts_with("host:") {
-            return Some(argument.replace("host:", ""));
-        }
-    }
-    None
-}
-
-/// Returns the port for the server to run on. Taken from command line args.
-#[cfg_attr(feature = "cargo-clippy", allow(ptr_arg))]
-fn get_port(args: &Vec<String>) -> Option<String> {
-    // TODO: port this to cli
-    for argument in args {
-        let arg_string = argument;
-        if arg_string.starts_with("port:") {
-            return Some(arg_string.replace("port:", ""));
-        }
-    }
-    None
-}

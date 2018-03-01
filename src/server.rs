@@ -89,31 +89,8 @@ impl fmt::Display for InternalServerError {
 impl Server {
     // TODO: Implement a server shutdown method that stops tcp listeners
     // this can be done with mpsc I believe.
-    /// Initializes a new server.
-    pub fn new() -> Server {
-        let config = Config::new();
-        let threads = config.threads.unwrap_or(1);
 
-        let thread_pool = ThreadPool::new(threads); 
-        
-        let static_folder = config.static_folder.clone();
-
-        let router =  Router::from(&static_folder
-                                   .unwrap_or_else(|| "static".to_string()));
-
-        let dir = env::current_dir().unwrap();
-
-        Server {
-            config,
-            thread_pool,
-            router,
-            dir,
-        }
-    }
-
-    /// Creates a server with provided config object. Currently only used in 
-    /// testing.
-    #[allow(dead_code)]
+    /// Creates a server with provided config object.
     pub fn from_config(config: Config) -> Server {
         let threads = config.threads.unwrap_or(1);
         let thread_pool = ThreadPool::new(threads);
@@ -134,12 +111,8 @@ impl Server {
         }
     }
 
-    pub fn set_threads(&mut self, threads: usize) {
-        vprintln!("Setting threadpool size to: {}", threads);
-        self.thread_pool = ThreadPool::new(threads);
-    }
-
     pub fn serve_directory(&mut self, dir: &str) {
+        trace!("Registering static routes for: {}", dir);
         self.router.register_static_routes(dir);
     }
 
