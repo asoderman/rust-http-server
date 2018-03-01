@@ -6,7 +6,7 @@ use std::io::prelude::*;
 use std::io::Error;
 use std::default::Default;
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Config {
     pub host: String,
     pub port: String,

@@ -92,6 +92,7 @@ impl Server {
 
     /// Creates a server with provided config object.
     pub fn from_config(config: Config) -> Server {
+        debug!("Initializing a server with config: \n{:#?}", config);
         let threads = config.threads.unwrap_or(1);
         let thread_pool = ThreadPool::new(threads);
 
