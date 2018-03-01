@@ -1,4 +1,6 @@
 use std::usize;
+use std::env;
+
 use clap::{App, ArgMatches};
 
 use config::{ConfigBuilder, Config};
@@ -19,6 +21,7 @@ pub fn run_cli<'a, 'b>() -> App<'a, 'b> {
             --cert=[CERT]           'Path to pkcs12 certificate'
             --pwd=[PWD]             'Password for the pkcs12'
             -t, --threads=[THREADS] 'Sets the number of threads to use'
+            -l, --log=[LOG_LEVEL]   'Sets the log level (debug, error, info, trace, warn)'
             -v...                   'Sets verbosity'")
 
 }
@@ -53,6 +56,12 @@ pub fn config_from_cli(args: &ArgMatches) -> Config {
     }
 
     config.build()
+}
+
+pub fn cli_logging(args: &ArgMatches) {
+    if let Some(log) = args.value_of("log") {
+        env::set_var("RUST_HTTP_SERVER_LOG", log)
+    }
 }
 
 pub fn cli_verbosity(app: &ArgMatches) {

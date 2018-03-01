@@ -23,13 +23,14 @@ mod cli;
 
 use std::process;
 
-use cli::{run_cli, config_from_cli, cli_verbosity, cli_serve_directory};
+use cli::{run_cli, config_from_cli, cli_verbosity, cli_serve_directory, cli_logging};
 
 pub static mut VERBOSE: bool = false;
 
 fn main() {
     let cli = run_cli().get_matches();
     cli_verbosity(&cli);
+    cli_logging(&cli);
     pretty_env_logger::init_custom_env("RUST_HTTP_SERVER_LOG");
 
     let name = env!("CARGO_PKG_NAME");
