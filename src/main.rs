@@ -34,9 +34,7 @@ fn main() {
 
     let name = env!("CARGO_PKG_NAME");
     println!("Running {}", name);
-    if !log_enabled!(log::Level::Trace) {
-        eprintln!("Logger is not enabled. To enable set env var `RUST_HTTP_SERVER_LOG=log=trace`")
-    }
+
     // Listen for keyboard interrupt here
     ctrlc::set_handler(move || {
         // TODO: Implement cleanup instead of just exiting
