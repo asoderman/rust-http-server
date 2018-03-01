@@ -14,7 +14,6 @@ pub struct Config {
     pub static_folder: Option<String>,
     pub https_cert: Option<String>,
     pub cert_password: Option<String>,
-    pub app_path: Option<String>,
     pub threads: Option<usize>,
 }
 
@@ -26,7 +25,6 @@ pub struct ConfigBuilder {
     pub static_folder: Option<String>,
     pub https_cert: Option<String>,
     pub cert_password: Option<String>,
-    pub app_path: Option<String>,
     pub threads: Option<usize>,
 }
 
@@ -52,7 +50,6 @@ impl ConfigBuilder {
         self
     }
 
-    #[allow(dead_code)]
     pub fn set_app(&mut self, app: &str) -> &mut Self {
         self.app = Some(app.to_string());
         self
@@ -64,13 +61,11 @@ impl ConfigBuilder {
         self
     }
 
-    #[allow(dead_code)]
     pub fn set_https_cert(&mut self, https_cert: &str) -> &mut Self {
         self.https_cert = Some(https_cert.to_string());
         self
     }
 
-    #[allow(dead_code)]
     pub fn set_cert_password(&mut self, cert_password: &str) -> &mut Self {
         self.cert_password = Some(cert_password.to_string());
         self
@@ -89,7 +84,6 @@ impl ConfigBuilder {
             static_folder: self.static_folder,
             https_cert: self.https_cert,
             cert_password: self.cert_password,
-            app_path: None,
             threads: self.threads,
         }
     }
@@ -104,7 +98,6 @@ impl Default for ConfigBuilder {
             static_folder: None,
             https_cert: None,
             cert_password: None,
-            app_path: None,
             threads: None,
         }
     }

@@ -13,28 +13,43 @@ pub fn run_cli<'a, 'b>() -> App<'a, 'b> {
         .author(author)
         .args_from_usage(
             "[DIRECTORY]            'Serves the contents of the directory'
-            -t, --threads=[THREADS] 'Sets the number of threads to use'
             -h, --host=[HOST]       'Sets the host address'
             -p, --port=[PORT]       'Sets the port'
+            -a, --app=[APP]         '<module>:<callable> The server application'
+            -cert=[CERT],           'Path to pkcs12 certificate'
+            -pwd=[PWD],             'Password for the pkcs12'
+            -t, --threads=[THREADS] 'Sets the number of threads to use'
             -v...                   'Sets verbosity'")
 
 }
 
-pub fn config_from_cli(app: &ArgMatches) -> Config {
+pub fn config_from_cli(args: &ArgMatches) -> Config {
     let mut config = ConfigBuilder::from_json_file("config.json").unwrap_or_default();
 
-    if let Some(t) = app.value_of("threads") {
+    if let Some(t) = args.value_of("threads") {
         let threads = usize::from_str_radix(t, 10)
             .expect("Please enter an integer for thread size");
         config.set_threads(threads);
     }
 
-    if let Some(host) = app.value_of("host") {
+    if let Some(host) = args.value_of("host") {
         config.set_host(host);
     }
 
-    if let Some(port) = app.value_of("port") {
+    if let Some(port) = args.value_of("port") {
         config.set_port(port);
+    }
+
+    if let Some(app) = args.value_of("app") {
+        config.set_app(app);
+    }
+
+    if let Some(cert) = args.value_of("cert") {
+        config.set_https_cert(cert);
+    }
+
+    if let Some(pwd) = args.value_of("pwd") {
+        config.set_cert_password(pwd);
     }
 
     config.build()
