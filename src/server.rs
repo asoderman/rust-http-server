@@ -124,8 +124,8 @@ impl Server {
     /// Takes requests and adds them and their handler to the threadpool.
     pub fn serve(&self) {
         let listener = TcpListener::bind(format!("{}:{}", &self.config.host, &self.config.port)).expect("Could not start listener on specified host address/port");
-        println!("Running on host: {}", &self.config.host);
-        println!("Running on port: {}", &self.config.port);
+        info!("Running on host: {}", &self.config.host);
+        info!("Running on port: {}", &self.config.port);
 
         let app = Arc::new(Application::create(self.config.app.as_ref(), &self.config.port)); // This will probably be changed
         let shared_router = Arc::new(self.router.clone());
@@ -134,7 +134,7 @@ impl Server {
         
         if https {
             
-            println!("HTTPS enabled. Running on {}:8443", &self.config.host);
+            info!("HTTPS enabled. Running on {}:8443", &self.config.host);
             let second_listener = TcpListener::bind(format!("{}:8443", &self.config.host)).expect("Unable to create TCP listener on specified HTTPS port.");
             let https_app = app.clone();
             let https_router = shared_router.clone();
@@ -249,7 +249,10 @@ fn handle_connection<T: Connection>(stream: &mut T,
                             .map_or(Response::not_found().to_string(), |app| { 
                                 match app.handle_one_request(request){
                                     Ok(v) => v,
-                                    Err(_) => Response::server_error().to_string()
+                                    Err(e) => {
+                                        error!("Application error: {:?}", e);
+                                        Response::server_error().to_string()
+                                    }
                                 }
                             });
                         if let Err(e) = stream.write(result.as_bytes()) {
