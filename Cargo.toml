@@ -1,7 +1,11 @@
 [package]
 name = "rust-http-server"
-version = "0.0.0"
-authors = ["Alex Soderman"]
+version = "0.0.1"
+authors = ["Alex Soderman <asoderman.as@gmail.com>"]
+repository = "https://github.com/asoderman/rust-http-server"
+description = """
+A simple and fast HTTP server written in rust.
+"""
 
 [features]
 python = []
