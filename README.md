@@ -1,5 +1,6 @@
 # Rust-HTTP-Server
 [![Build Status](https://travis-ci.org/asoderman/rust-http-server.svg?branch=master)](https://travis-ci.org/asoderman/rust-http-server)
+[![Crates.io](https://img.shields.io/crates/v/rustc-serialize.svg)](https://crates.io/crates/rust-http-server)
 
 Rust-HTTP-Server is a small multi-threaded webserver that supports TLS and WSGI. Rust-HTTP-Server's goal is to be an easy to use, fast and lightweight http server.
 
@@ -9,12 +10,19 @@ Rust-HTTP-Server is a small multi-threaded webserver that supports TLS and WSGI.
 * [TODO](#todo)
 
 # Installation:
-Currently the only way to install rust-http-server is to download the project and build with cargo. crates.io support is coming soon!
+
+### macOS:
+`cargo install rust-http-server` will work as long as you have a homebrew install of python. If you 
+are still using the python install provided by Apple run `brew reinstall python` first.
+
+### Ubuntu:
+This will install system dependencies and then install the server via cargo.
+
+`sudo apt-get install -y pkg-config libssl-dev python3-dev && cargo install rust-http-server`
 
 # Usage:
-### With Cargo:
-* `cargo run` to start the server
-* `cargo run -- -h` for help
+* `rust-http-server` to start the server
+* `rust-http-server --help` for help
 * `cargo test` to run the tests (Note: Openssl must be installed on your system otherwise the TLS test will fail.)
 
 rust-http-server will look for `config.json` in the current working directory. Config options include:
