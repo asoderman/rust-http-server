@@ -3,6 +3,7 @@ name = "rust-http-server"
 version = "0.0.1"
 authors = ["Alex Soderman <asoderman.as@gmail.com>"]
 repository = "https://github.com/asoderman/rust-http-server"
+license = "BSD-2-Clause"
 description = """
 A simple and fast HTTP server written in rust.
 """
