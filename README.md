@@ -12,10 +12,20 @@ Rust-HTTP-Server is a small multi-threaded webserver that supports TLS and WSGI.
 # Installation:
 
 ### macOS:
+
+#### Homebrew
+Tap this repo then install via homebrew.
+
+`brew tap asoderman/rust-http-server https://github.com/asoderman/rust-http-server`
+`brew install asoderman/rust-http-server/rust-http-server`
+
+#### Cargo:
 `cargo install rust-http-server` will work as long as you have a homebrew install of python. If you 
 are still using the python install provided by Apple run `brew reinstall python` first.
 
 ### Ubuntu:
+
+#### Cargo:
 This will install system dependencies and then install the server via cargo.
 
 `sudo apt-get install -y pkg-config libssl-dev python3-dev && cargo install rust-http-server`
