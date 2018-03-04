@@ -1,4 +1,7 @@
 dist: trusty
+env:
+  global:
+    - CRATE_NAME=rust-http-server
 
 before_install:
   - set -e
@@ -8,11 +11,15 @@ before_install:
   - sudo pip3 install bottle
   - sudo pip3 install Flask
 
+install:
+  - sh ci/install.sh
+
 addons:
     apt:
         packages:
             - python3-dev
             - python3-pip
+            - python3
 language: rust
 matrix:
   include:
@@ -30,3 +37,28 @@ matrix:
     - rust: nightly
 script:
   - cargo test --verbose --all -- --test-threads=1
+
+after_script: set +e
+
+before_deploy:
+  - sh ci/before_deploy.sh
+
+deploy:
+  api_key:
+    secure: Omt8E1tnpJsy5a4zBs2O0RgDwU+/Fohcz+yzrxrEh0JQWCj6YA4cvnnmUgoctcwfuK3uA3hdzyrP1QkOrbGCorYFRGzVCdq4CLGBTuWY2SFlJVG7DmYBo3C6wpAUxKO9Njie1uDqtVext5rk8o+0WUSJtbOxRqqVh42HfjKNacLUE04GA8p3U6z4rQQStRMUhflovDAZUT1JYS4n2AJ963cLssLep50nfH6xorBTvSWCH2S3Q36bXDFx4FAWq9lSVju/quktgEeWKjsDtpsf7zqkWHYd8enmf4oLRjCMm6aUZvHRmxGIc8/rK1ctWzVPZR15PNt2wAAzBGEYVUfJ44nFAbRZEovxnAsK1Y7ybIe3Je7YNJZgo17MmtMpYOihVtksfrjWgj9Rzd2TQi5c5c79R9MsJd+Mu/4xn1AcNW9C75kGkxCaI9iSfehszktMNZSZxUFmEeeY4GE1YPb99wyPAuEZ27lIvv2gZ575jXHr8HHzvHIEF/8sNiBKGDh5cVQaCEJj4356U9hIkdJv6HOISIv0hy78aXB51i+4212Hb2B54kx6IUJD5hQBCffFkG5n5t/yNcSJW0wEwpWtQ0bYHnvVQdXopjR3UNfptQNGp3RAlkN3cKrLkbAkJ32KLlGq3EBmBr0ZxFFS3F1xdT1KdWPiK5t7beY93Z1rq+M=
+  file_glob: true
+  file: $CRATE_NAME-$TRAVIS_TAG-$TARGET.*
+  on:
+    condition: $TRAVIS_RUST_VERSION = stable
+    tags: true
+  provider: releases
+  skip_cleanup: true
+
+cache: cargo
+before_cache:
+  # Travis can't cache files that are not readable by "others"
+  - chmod -R a+r $HOME/.cargo
+
+notifications:
+  email:
+    on_success: never
