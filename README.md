@@ -17,6 +17,7 @@ Rust-HTTP-Server is a small multi-threaded webserver that supports TLS and WSGI.
 Tap this repo then install via homebrew.
 
 `brew tap asoderman/rust-http-server https://github.com/asoderman/rust-http-server`
+
 `brew install asoderman/rust-http-server/rust-http-server`
 
 #### Cargo:
@@ -54,6 +55,7 @@ CLI usage:
             -cert=[CERT],           'Path to pkcs12 certificate'
             -pwd=[PWD],             'Password for the pkcs12'
             -t, --threads=[THREADS] 'Sets the number of threads to use'
+            -l, --log=[LOG_LEVEL]   'Sets the log level (debug, error, info, trace, warn)'
             -v...                   'Sets verbosity'
 ```
 
