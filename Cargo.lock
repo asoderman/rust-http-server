@@ -755,7 +755,7 @@ dependencies = [
 
 [[package]]
 name = "rust-http-server"
-version = "0.0.0"
+version = "0.0.1"
 dependencies = [
  "chrono 0.4.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "clap 2.30.0 (registry+https://github.com/rust-lang/crates.io-index)",

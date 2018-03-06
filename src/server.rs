@@ -140,8 +140,8 @@ impl Server {
             
             info!("HTTPS enabled. Running on {}:8443", &self.config.host);
             let second_listener = TcpListener::bind(format!("{}:8443", &self.config.host)).expect("Unable to create TCP listener on specified HTTPS port.");
-            let https_app = app.clone();
-            let https_router = shared_router.clone();
+            let https_app = Arc::clone(&app);
+            let https_router = Arc::clone(&shared_router);
 
             // TLS 
             let cert_filename = self.config.https_cert.clone().unwrap();
@@ -171,9 +171,9 @@ impl Server {
                 for stream in second_listener.incoming() {
                     match stream {
                         Ok(stream) => {
-                            let app_instance = https_app.clone();
-                            let router_instance = https_router.clone();
-                            let acceptor = acceptor.clone();
+                            let app_instance = Arc::clone(&https_app);
+                            let router_instance = Arc::clone(&https_router);
+                            let acceptor = Arc::clone(&acceptor);
                             let mut stream = match acceptor.accept(stream) {
                                 Ok(stream) => stream,
                                 Err(e) => {
@@ -201,8 +201,8 @@ impl Server {
         for stream in listener.incoming() {
             match stream {
                 Ok(mut stream) => {
-                    let app_instance = app.clone();
-                    let router_instance = shared_router.clone();
+                    let app_instance = Arc::clone(&app);
+                    let router_instance = Arc::clone(&shared_router);
                     self.thread_pool.execute(move || {
                         if let Err(e) = handle_connection(&mut stream, app_instance.as_ref(), &router_instance) {
                             error!("Error handling connection {:?}", e);
